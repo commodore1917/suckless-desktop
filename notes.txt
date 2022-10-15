@@ -1,0 +1,2 @@
+# Surf browser dependencies
+webkit2gtk-devel gcr-devel xprop

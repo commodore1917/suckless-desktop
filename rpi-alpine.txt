@@ -1,0 +1,17 @@
+Before installing Alpine in the RPi, add this to usercfg.txt in the SD card:
+
+dtparam=audio=on
+disable_overscan=1
+dtoverlay=vc4-fkms-v3d
+gpu_mem=256
+
+After installing the system, install video drivers for RPi:
+
+mesa-dri-vc4 mesa-dri-swrast mesa-gbm xf86-video-fbdev libinput
+
+Finally, configure /etc/X11/xorg.conf like this:
+
+Section "Device"
+  Identifier "default"
+  Driver "fbdev"
+EndSection
