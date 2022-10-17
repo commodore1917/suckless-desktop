@@ -19,7 +19,7 @@ static int borderpx = 2;
 static char *shell = "/bin/sh";
 char *utmp = NULL;
 /* scroll program: to enable use a string like "scroll" */
-char *scroll = "scroll";
+char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 
 /* identification sequence returned in DA and DECID */
@@ -99,38 +99,43 @@ float alpha = 0.5;
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
 	/* 8 normal colors */
-	[0] = "#000000", /* black   */
-	[1] = "#ca2b7b", /* red     */
-  [2] = "#8f3a84", /* green   */
-	[3] = "#bb8a35", /* yellow  */
-	[4] = "#516aec", /* blue    */
-	[5] = "#7b59c0", /* magenta */
-	[6] = "#159393", /* cyan    */
-	[7] = "#ab9bab", /* white   */
-	
-  /* 8 bright colors */
-	[8]  = "#000000", /* black   */
-	[9]  = "#ca2b7b", /* red     */
-	[10] = "#8f3a84", /* green   */
-	[11] = "#bb8a35", /* yellow  */
-	[12] = "#516aec", /* blue    */
-	[13] = "#7b59c0", /* magenta */
-	[14] = "#159393", /* cyan    */
-	[15] = "#f7f3f7", /* white   */
+	"#65e28d",
+	"#ca2b7b",
+	"#8f3a84",
+	"#bb8a35",
+	"#516aec",
+	"#7b59c0",
+	"#159393",
+	"#ab9bab",
 
-	/* special colors */
-	[256] = "#1b181b", /* background */
-	[257] = "#ab9bab", /* foreground */
+	/* 8 bright colors */ 
+	"#65e28d",
+	"#ca2b7b",
+	"#8f3a84",
+	"#bb8a35",
+	"#516aec",
+	"#7b59c0",
+	"#159393",
+	"#ab9bab",
+
+	[255] = 0,
+
+	/* more colors can be added after 255 to use with DefaultXX */
+	"#cccccc",
+	"#555555",
+	"gray90", /* default foreground colour */
+	"black", /* default background colour */
 };
 
+
 /*
- *  * Default colors (colorname index)
- *   * foreground, background, cursor
- *    */
-unsigned int defaultfg = 257;
-unsigned int defaultbg = 0;
-static unsigned int defaultcs = 150;
-static unsigned int defaultrcs = 150;
+ * Default colors (colorname index)
+ * foreground, background, cursor, reverse cursor
+ */
+unsigned int defaultfg = 258;
+unsigned int defaultbg = 259;
+unsigned int defaultcs = 256;
+static unsigned int defaultrcs = 257;
 
 /*
  * Default shape of cursor
@@ -174,6 +179,8 @@ static uint forcemousemod = ShiftMask;
  */
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
+	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
+	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
 	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
 	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
@@ -191,14 +198,16 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ TERMMOD,              XK_k,           zoom,           {.f = +1} },
-	{ TERMMOD,              XK_j,           zoom,           {.f = -1} },
+	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
+	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
 	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
+	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
+	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
 };
 
 /*

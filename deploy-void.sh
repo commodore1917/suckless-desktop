@@ -5,11 +5,29 @@ if [[ $EUID = 0 ]]; then
    exit 1
 fi
 
+# Exit on errors
+set -e
+
 echo ""
 echo "************************************************"
 echo "**   Void linux Suckless Desktop Installer    **"
 echo "************************************************"
 echo ""
+
+# Check if doas is installed
+if ! command -v doas &> /dev/null
+then
+	# Install doas
+    echo "doas could not be found"
+    echo "Installing..."
+    sudo xbps-install -Syu opendoas
+	sudo echo "permit persist :wheel" >> /etc/doas.conf
+	USERNAME=$(whoami)
+	sudo adduser $USERNAME wheel
+	sudo echo "ignorepkg=sudo" > /etc/xbps.d/ignoresudo.conf
+	doas xbps-remove -Ry sudo
+fi
+
 
 # Install dependencies [font-awesome?]
 echo "Installing dependencies..."
@@ -17,7 +35,7 @@ sudo xbps-install -Syu xorg-minimal xorg-fonts base-devel libXau-devel libXdmcp-
 
 # Install utilities
 echo "Installing utilities..."
-sudo xbps-install -Syu wget curl vim opendoas mpv sxiv mupdf #firefox
+sudo xbps-install -Syu wget curl vim mpv sxiv mupdf #firefox
 
 # Build suckless tools
 echo "Building suckless tools..."
@@ -71,12 +89,6 @@ sudo cp scripts/* /usr/bin/
 # sudo ln -s /etc/sv/bluetoothd /var/service/
 # sv restart dbus
 
-# Change sudo for doas
-# echo "Changing sudo for doas..."
-# USERNAME=$(whoami)
-# sudo echo "permit $USERNAME as root" >> /etc/doas.conf
-# echo "alias sudo='doas'" >> $HOME/.bashrc
-# doas xbps-remove -y sudo
 
 # Start desktop
 startx

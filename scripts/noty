@@ -5,10 +5,10 @@
 display_duration=3.0
 
 # Maximum number of characters:
-char_limit=41
+char_limit=50
 
-# Notification sound path
-sound=/usr/share/sounds/notification.wav
+# Notification sound path:
+sound=/usr/share/sounds/notification2.wav
 
 # Stop old tiramisu processes if any:
 kill -9 $(pgrep -x tiramisu)

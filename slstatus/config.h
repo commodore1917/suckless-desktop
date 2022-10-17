@@ -65,10 +65,13 @@ static const char unknown_str[] = "";
  */
 static const struct arg args[] = {
 	/* function format          argument */
+	//{ netspeed_tx, " ï‡«  %s/", "enp0s3" },
+	//{ netspeed_rx, "%f | ",   "enp0s3"},
 	{ netspeed_tx, " TX %s|", "eth0" },
 	{ netspeed_rx, " RX %s|", "eth0"},
 	//{ cpu_freq, "%sHz, ",      NULL },
 	{ cpu_perc, " CPU %s%% |",  NULL },
+	//{ ram_used, " ï‹› %sB | ",      NULL },
 	{ ram_used, " RAM %s |",      NULL },
 	//{ run_command, "%4s ", "vol.sh"},
 	//{ run_command, "%2s | ", "cat $HOME/void-suckless/scripts/weather.txt" },

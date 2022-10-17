@@ -3,4 +3,5 @@ xautolock -time 10 -locker slock &
 feh --bg-scale $HOME/.wallpapers/wallpaper.jpg
 xcompmgr &
 exec slstatus &
+exec noty &
 exec dwm

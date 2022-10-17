@@ -8,7 +8,13 @@ PS1="\[\033[0;31m\]\342\224\214\342\224\200\$([[ \$? != 0 ]] && echo \"[\[\033[0
 alias ls='ls --color=auto'
 alias bm='bashmount'
 alias sudo='doas'
-alias xi='doas apk add'
-alias xu='doas apk -U upgrade'
-alias xr='doas apk del'
-alias xs='apk search'
+# Alpine Linux
+#alias xi='doas apk add'
+#alias xu='doas apk -U upgrade'
+#alias xr='doas apk del'
+#alias xs='apk search'
+# Void Linux
+#alias xi='doas xbps-install -Syu'
+#alias xu='doas xbps-install -Syu'
+#alias xr='doas xbps-remove -R'
+#alias xs='doas xbps-query -Rs'
