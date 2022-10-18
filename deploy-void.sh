@@ -19,30 +19,33 @@ if ! command -v doas &> /dev/null
 then
 	# Install doas
     echo "doas could not be found"
-    echo "Installing..."
-    sudo xbps-install -Syu opendoas
-	sudo echo "permit persist :wheel" >> /etc/doas.conf
-	USERNAME=$(whoami)
-	sudo adduser $USERNAME wheel
-	sudo echo "ignorepkg=sudo" > /etc/xbps.d/ignoresudo.conf
-	doas xbps-remove -Ry sudo
+    echo "Installing doas..."
+    USERNAME=$(whoami)
+    sudo xbps-install -Syu opendoas 
+    sudo bash -c "echo \"permit persist :wheel\" > /etc/doas.conf"
+    sudo usermod -a -G wheel $USERNAME
+    sudo bash -c "echo \"ignorepkg=sudo\" > /etc/xbps.d/ignoresudo.conf"
+    doas xbps-remove -Ry sudo   
+    doas ln -s /bin/doas /bin/sudo
 fi
 
 
 # Install dependencies [font-awesome?]
 echo "Installing dependencies..."
-sudo xbps-install -Syu xorg-minimal xorg-fonts base-devel libXau-devel libXdmcp-devel libxcb-devel libX11-devel libXext-devel libXinerama-devel libXrender-devel libXft-devel libXrandr-devel libpng xrandr xautolock xcompmgr freetype-devel fontconfig alsa-utils feh git void-repo-nonfree tiramisu
+doas xbps-install -Syu xorg-minimal xorg-fonts base-devel libXau-devel libXdmcp-devel libxcb-devel libX11-devel libXext-devel libXinerama-devel libXrender-devel libXft-devel libXrandr-devel libpng xrandr xautolock xcompmgr freetype-devel fontconfig alsa-utils feh git void-repo-nonfree tiramisu
 
 # Install utilities
 echo "Installing utilities..."
-sudo xbps-install -Syu wget curl vim mpv sxiv mupdf #firefox
+doas xbps-install -Syu wget curl vim mpv sxiv mupdf #firefox
 
 # Build suckless tools
 echo "Building suckless tools..."
 for folder in dwm/ dmenu/ st/ slock/ slstatus/
 do
     cd $folder
-    sudo make clean install
+    make
+    doas make install
+    make clean
     cd ..
 done
 
@@ -50,7 +53,7 @@ done
 git clone https://github.com/afify/sfm
 cd sfm/
 make
-sudo make install
+doas make install
 cd ..
 rm -rf sfm/
 
@@ -77,7 +80,8 @@ cp sounds/* /usr/share/sounds
 
 # Copy scripts to /usr/bin/
 echo "Copying scripts to /usr/bin/..."
-sudo cp scripts/* /usr/bin/
+chmod +x scripts/*
+doas cp scripts/* /usr/bin/
 
 # Laptop battery
 # sudo xbps-install -Sy tlp
@@ -89,7 +93,5 @@ sudo cp scripts/* /usr/bin/
 # sudo ln -s /etc/sv/bluetoothd /var/service/
 # sv restart dbus
 
-
 # Start desktop
 startx
-
