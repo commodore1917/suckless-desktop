@@ -3,7 +3,7 @@
 VOLONOFF="$(amixer sget Master | grep Left: | sed 's/[][]//g' | awk '{print $7}')"
 VOL="$(amixer sget Master | awk -F'[][]' 'END{print $2}')"
 
-VOLICON=""
+VOLICON="VOL"
 MUTEICON="Muted"
 
 
