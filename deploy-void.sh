@@ -17,7 +17,9 @@ echo ""
 # Check if doas is installed
 if ! command -v doas &> /dev/null
 then
-	# Install doas
+    # Update
+    sudo xbps-install -Syu
+    # Install doas
     echo "doas could not be found"
     echo "Installing doas..."
     USERNAME=$(whoami)
@@ -29,6 +31,9 @@ then
     doas ln -s /bin/doas /bin/sudo
 fi
 
+# Update
+echo "Updating..."
+doas xbps-install -Syu
 
 # Install dependencies [font-awesome?]
 echo "Installing dependencies..."
