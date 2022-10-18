@@ -66,7 +66,7 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 # Deploy dotfiles
 echo "Deploying dotfiles..."
 cat dotfiles/.xinitrc >> $HOME/.xinitrc
-echo "startx" >> $HOME/.bash_profile
+#echo "startx" >> $HOME/.bash_profile
 echo "startx" >> $HOME/.profile
 mv dotfiles/.bashrc $HOME/.bashrc
 mv dotfiles/.vimrc $HOME/.vimrc
@@ -78,12 +78,13 @@ cp wallpapers/* $HOME/.wallpapers/
 
 # Deploy sounds
 echo "Deploying sounds..."
+mkdir /usr/share/sounds
 cp sounds/* /usr/share/sounds
 
 # Copy scripts to /usr/bin/
 echo "Copying scripts to /usr/bin/..."
+chmod +x scripts/*
 doas cp scripts/* /usr/bin/
 
 # Start desktop
 startx
-
