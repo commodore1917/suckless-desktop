@@ -81,7 +81,7 @@ mkdir $HOME/.wallpapers
 cp wallpapers/* $HOME/.wallpapers/
 
 # Deploy sounds
-cp sounds/* /usr/share/sounds
+doas cp sounds/* /usr/share/sounds
 
 # Copy scripts to /usr/bin/
 echo "Copying scripts to /usr/bin/..."
